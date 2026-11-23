@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>あのね...</title>
+  <style>
+    body {
+      background-color: #fff0f5;
+      font-family: 'Hiragino Maru Gothic ProN', 'Rounded M+ 1c', 'Meiryo', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: #5a3d42;
+    }
+    .container {
+      background: white;
+      padding: 40px 20px;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+    .text {
+      font-size: 1.2rem;
+      margin-bottom: 40px;
+      line-height: 1.8;
+      min-height: 60px;
+    }
+    .buttons {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 15px;
+    }
+    button {
+      flex: 1;
+      background-color: #ffb3ba;
+      border: none;
+      padding: 15px 10px;
+      border-radius: 30px;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      word-break: keep-all;
+    }
+    button:hover {
+      background-color: #ff919d;
+    }
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div id="text" class="text"></div>
+  <div id="buttons" class="buttons">
+    <button id="btn-left" onclick="choose('left')"></button>
+    <button id="btn-right" onclick="choose('right')"></button>
+  </div>
+</div>
+
+<script>
+  // ★ ここにGASでコピーした「ウェブアプリのURL」を貼り付けてください ★
+  const GAS_URL = 'ここにGoogle Apps ScriptのURLを貼り付けます';
+
+  const story = {
+    1: {
+      text: "え、なんでこれ開いたの？<br>もしかして私のことすき？",
+      left: { text: "すきだよぅー", next: 2, label: "すきだよぅー" },
+      right: { text: "そんなんじゃねぇ〜よぅ", next: 3, label: "そんなんじゃねぇ〜よぅ" }
+    },
+    2: {
+      text: "本気のすき？",
+      left: { text: "だいすきです", next: 4, label: "だいすきです" },
+      right: { text: "え？", next: 5, label: "え？" }
+    },
+    3: {
+      text: "ざーんねーん",
+      end: true
+    },
+    4: {
+      text: "なぁに、さいきんは気になるひといないの？<br>いい感じのひとは？",
+      left: { text: "いるねー", next: 6, label: "いるねー" },
+      right: { text: "いないよぅん", next: 7, label: "いないよぅん" }
+    },
+    5: {
+      text: "ぶりぶり左衛門",
+      end: true
+    },
+    6: {
+      text: "このやろう〜しあわせやろう〜",
+      end: true
+    },
+    7: {
+      text: "私と付き合わない？",
+      left: { text: "よろしくだよ", next: 8, label: "よろしくだよ" },
+      right: { text: "(おまえちゃんと断る時は断れよぅ)", next: 8, label: "(おまえちゃんと断る時は断れよぅ)" }
+    },
+    8: {
+      text: "これもう終わりだよ〜ありがとう〜",
+      end: true
+    }
+  };
+
+  let currentStep = 1;
+  let history = []; 
+
+  function renderStep() {
+    const step = story[currentStep];
+    document.getElementById('text').innerHTML = step.text;
+
+    const btnContainer = document.getElementById('buttons');
+    const btnLeft = document.getElementById('btn-left');
+    const btnRight = document.getElementById('btn-right');
+
+    if (step.end) {
+      btnContainer.classList.add('hidden');
+    } else {
+      btnContainer.classList.remove('hidden');
+      btnLeft.innerText = step.left.text;
+      btnRight.innerText = step.right.text;
+    }
+  }
+
+  function choose(direction) {
+    const step = story[currentStep];
+    const choice = step[direction];
+
+    // 選んだ内容を履歴に追加
+    history.push(choice.label);
+
+    // ボタンを押すたびに毎回スプレッドシートへ送信
+    sendDataToGoogleSheet();
+
+    // 次のステップへ進む
+    currentStep = choice.next;
+    renderStep();
+  }
+
+  function sendDataToGoogleSheet() {
+    if (GAS_URL === 'https://script.google.com/macros/s/AKfycbw--d1afa3ngYzPlsZjANmZY9bOQIi5IpYvAFCQ-zRJN0_frKpSfWZYCZznoxr3dWwKnw/exec') {
+      return;
+    }
+
+    const params = new URLSearchParams();
+    params.append('choices', history.join(' ➔ '));
+
+    fetch(GAS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: params,
+    }).catch(error => {
+      console.error('送信エラー', error);
+    });
+  }
+
+  renderStep();
+</script>
+</body>
+</html>
