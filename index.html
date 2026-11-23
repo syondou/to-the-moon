@@ -6,7 +6,7 @@
   <title>あのね...</title>
   <style>
     body {
-      background-color: #fff0f5;
+      background-color: #f5f0e6; /* 温かみのあるベージュ色に変更しました */
       font-family: 'Hiragino Maru Gothic ProN', 'Rounded M+ 1c', 'Meiryo', sans-serif;
       display: flex;
       justify-content: center;
@@ -19,7 +19,7 @@
       background: white;
       padding: 40px 20px;
       border-radius: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
       text-align: center;
       max-width: 400px;
       width: 90%;
@@ -38,7 +38,7 @@
     }
     button {
       flex: 1;
-      background-color: #ffb3ba;
+      background-color: #ffb3ba; /* ボタンはピンクのままです */
       border: none;
       padding: 15px 10px;
       border-radius: 30px;
@@ -68,8 +68,8 @@
 </div>
 
 <script>
-  // ★ ここにGASでコピーした「ウェブアプリのURL」を貼り付けてください ★
-  const GAS_URL = 'ここにGoogle Apps ScriptのURLを貼り付けます';
+  // 正しい位置にあなたのURLを設定しました
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbw--d1afa3ngYzPlsZjANmZY9bOQIi5IpYvAFCQ-zRJN0_frKpSfWZYCZznoxr3dWwKnw/exec';
 
   const story = {
     1: {
@@ -146,7 +146,7 @@
   }
 
   function sendDataToGoogleSheet() {
-    if (GAS_URL === 'https://script.google.com/macros/s/AKfycbw--d1afa3ngYzPlsZjANmZY9bOQIi5IpYvAFCQ-zRJN0_frKpSfWZYCZznoxr3dWwKnw/exec') {
+    if (!GAS_URL || GAS_URL === 'ここにGoogle Apps ScriptのURLを貼り付けます') {
       return;
     }
 
