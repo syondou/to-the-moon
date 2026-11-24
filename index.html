@@ -243,15 +243,15 @@
 
   <script>
     // ====== 請修改以下兩行設定 ======
-    const CORRECT_PASSWORD = "0101"; // 請改成對方的生日（例如 "0512" 或 "20010512"）
-    const GAS_URL = "https://script.google.com/macros/s/你的部署網址/exec";
+    const CORRECT_PASSWORD = "0916"; // 請改成對方的生日（例如 "0512" 或 "20010512"）
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbzfUUKv1LI_KZIbxxbNVfooP0IlHhFGY7S6_Wng1TaAKAUdPMqonnwESdPJCrgbd6to/exec";
     // ================================
 
     // 產生本次瀏覽的隨機識別碼，方便對應同一次閱讀的「開信」與「読了」時間
     const sessionId = Math.random().toString(36).substring(2, 10);
 
     function sendLog(eventName) {
-      if (!GAS_URL || GAS_URL.includes("https://script.google.com/macros/library/d/1yEGg67lPpY7IXNQWH2GhP9ffgzZ4NAYy_IAQJCzbUTnwg3PK6aEbNEH5/1")) return;
+      if (!GAS_URL || GAS_URL.includes("你的部署網址")) return;
       fetch(GAS_URL, {
         method: "POST",
         mode: "no-cors",
@@ -273,7 +273,7 @@
 
     function handleLogin() {
       const entered = passwordInput.value.trim();
-      if (entered === '0916') {
+      if (entered === CORRECT_PASSWORD) {
         // 1. 立即記錄輸入密碼成功的時間
         sendLog("密碼輸入正確（開啟信件）");
 
