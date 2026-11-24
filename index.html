@@ -3,166 +3,303 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>あのね...</title>
+  <title>手紙</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      background-color: #f5f0e6; /* 温かみのあるベージュ色に変更しました */
-      font-family: 'Hiragino Maru Gothic ProN', 'Rounded M+ 1c', 'Meiryo', sans-serif;
+      font-family: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+      background-color: #f9f7f4;
+      color: #2f2c2a;
+      line-height: 2;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
-      color: #5a3d42;
+      padding: 24px 16px;
     }
-    .container {
-      background: white;
-      padding: 40px 20px;
-      border-radius: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+
+    /* 密碼頁面 */
+    #login-screen {
       text-align: center;
-      max-width: 400px;
-      width: 90%;
+      max-width: 360px;
+      width: 100%;
+      padding: 40px 24px;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      animation: fadeIn 0.8s ease;
     }
-    .text {
-      font-size: 1.2rem;
-      margin-bottom: 40px;
-      line-height: 1.8;
-      min-height: 60px;
+
+    #login-screen p {
+      font-size: 15px;
+      margin-bottom: 8px;
+      letter-spacing: 0.06em;
     }
-    .buttons {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      gap: 15px;
+
+    .password-hint {
+      font-size: 13px;
+      color: #777;
+      margin-bottom: 24px !important;
     }
-    button {
-      flex: 1;
-      background-color: #ffb3ba; /* ボタンはピンクのままです */
+
+    #password-input {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 16px;
+      font-family: inherit;
+      text-align: center;
+      letter-spacing: 0.15em;
+      border: 1px solid #d8d3cc;
+      border-radius: 4px;
+      background: #fcfbfa;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    #password-input:focus {
+      border-color: #8c8279;
+    }
+
+    #login-btn {
+      margin-top: 16px;
+      width: 100%;
+      padding: 11px;
+      font-size: 14px;
+      font-family: inherit;
+      letter-spacing: 0.12em;
+      color: #fff;
+      background-color: #5c554e;
       border: none;
-      padding: 15px 10px;
-      border-radius: 30px;
-      color: white;
-      font-size: 1rem;
-      font-weight: bold;
+      border-radius: 4px;
       cursor: pointer;
-      transition: background-color 0.3s;
-      word-break: keep-all;
+      transition: background-color 0.2s;
     }
-    button:hover {
-      background-color: #ff919d;
+
+    #login-btn:hover {
+      background-color: #423d38;
     }
-    .hidden {
-      display: none !important;
+
+    #error-msg {
+      color: #b55454;
+      font-size: 13px;
+      margin-top: 12px;
+      min-height: 20px;
+    }
+
+    /* 信件頁面 */
+    #letter-screen {
+      display: none;
+      max-width: 640px;
+      width: 100%;
+      background: #ffffff;
+      padding: 48px 32px;
+      margin: 24px 0;
+      border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+      animation: fadeIn 1s ease;
+    }
+
+    .letter-content {
+      font-size: 15.5px;
+      letter-spacing: 0.04em;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .letter-date {
+      font-size: 13.5px;
+      color: #7a746e;
+      margin-bottom: 16px;
+    }
+
+    .letter-footer {
+      margin-top: 56px;
+      text-align: center;
+    }
+
+    #read-btn {
+      padding: 12px 44px;
+      font-size: 15px;
+      font-family: inherit;
+      letter-spacing: 0.18em;
+      color: #4a443f;
+      background-color: transparent;
+      border: 1px solid #a89f95;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    #read-btn:hover:not(:disabled) {
+      background-color: #5c554e;
+      border-color: #5c554e;
+      color: #ffffff;
+    }
+
+    #read-btn:disabled {
+      opacity: 0.55;
+      cursor: default;
+      border-color: #ccc;
+      color: #888;
+    }
+
+    #read-status {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #8c8279;
+      min-height: 20px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      #letter-screen {
+        padding: 36px 22px;
+      }
+      .letter-content {
+        font-size: 14.5px;
+      }
     }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <div id="text" class="text"></div>
-  <div id="buttons" class="buttons">
-    <button id="btn-left" onclick="choose('left')"></button>
-    <button id="btn-right" onclick="choose('right')"></button>
+  <!-- 密碼輸入畫面 -->
+  <div id="login-screen">
+    <p>元気になった時に見てね</p>
+    <p class="password-hint">パスワードはあなたの誕生日</p>
+    <input type="password" id="password-input" placeholder="例：0101" inputmode="numeric" autocomplete="off">
+    <button id="login-btn" type="button">開く</button>
+    <div id="error-msg"></div>
   </div>
-</div>
 
-<script>
-  // 正しい位置にあなたのURLを設定しました
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycbw--d1afa3ngYzPlsZjANmZY9bOQIi5IpYvAFCQ-zRJN0_frKpSfWZYCZznoxr3dWwKnw/exec';
+  <!-- 信件內容畫面 -->
+  <div id="letter-screen">
+    <div class="letter-date">11月24日 18：13</div>
+    <div class="letter-content">たくみ：
+元気にしてるかな？
+これは私がずっと聞きたかったことだよ
 
-  const story = {
-    1: {
-      text: "え、なんでこれ開いたの？<br>もしかして私のことすき？",
-      left: { text: "すきだよぅー", next: 2, label: "すきだよぅー" },
-      right: { text: "そんなんじゃねぇ〜よぅ", next: 3, label: "そんなんじゃねぇ〜よぅ" }
-    },
-    2: {
-      text: "本気のすき？",
-      left: { text: "だいすきです", next: 4, label: "だいすきです" },
-      right: { text: "え？", next: 5, label: "え？" }
-    },
-    3: {
-      text: "ざーんねーん",
-      end: true
-    },
-    4: {
-      text: "なぁに、さいきんは気になるひといないの？<br>いい感じのひとは？",
-      left: { text: "いるねー", next: 6, label: "いるねー" },
-      right: { text: "いないよぅん", next: 7, label: "いないよぅん" }
-    },
-    5: {
-      text: "ぶりぶり左衛門",
-      end: true
-    },
-    6: {
-      text: "このやろう〜しあわせやろう〜",
-      end: true
-    },
-    7: {
-      text: "私と付き合わない？",
-      left: { text: "よろしくだよ", next: 8, label: "よろしくだよ" },
-      right: { text: "(おまえちゃんと断る時は断れよぅ)", next: 8, label: "(おまえちゃんと断る時は断れよぅ)" }
-    },
-    8: {
-      text: "これもう終わりだよ〜ありがとう〜",
-      end: true
-    }
-  };
+本当は、友達でいるつもりも、またご飯に行くつもりもなかった。
+でも一緒にカレー食べたあの日の後に動揺してしまった。
+たくみの悲しくなった顔がずっと頭から抜けなくて。
 
-  let currentStep = 1;
-  let history = []; 
+あれからずっと一回くらいはちゃんと話したかった。
+でもずっといいタイミングはなくて、
+たくみからひどいこと言われて、私も多分たくみのこと傷つけちゃったんだよね。
+だからずっと素直になれなくて、ちょこちょこだるいライン送っちゃったんだよね。
 
-  function renderStep() {
-    const step = story[currentStep];
-    document.getElementById('text').innerHTML = step.text;
+たくみが本当に思っていることは、私は多分知ることはもうないだろうと思うけど、少なくとも私が思っていたことは伝えたいと思う。このウェブサイトは多分そんなに長くは持たないと思うし、たくみもまたこのリンクを開くことはないと思うけど、書くね。
 
-    const btnContainer = document.getElementById('buttons');
-    const btnLeft = document.getElementById('btn-left');
-    const btnRight = document.getElementById('btn-right');
+本当は、たくみと話すようになる前は前の人とさよならしたばかりで、世界がまた私の望んでいたように静かで、私はそれを少し喜んでいたのかもしれない。詳しいことは忘れたし、話すつもりはないから、飛ばすね。
+たまに日記を書いているけど、たまにたくみとのことも書いてた。
+たくみへの気持ちと、また誰かと関係に入ってまた自分を失うんじゃないかなっていう不安と向き合っていた。たくみと付き合うことになるかどうかは知らなかったんだけど、もしもそんなことになったらって思って、心の準備をしていた。自分が傷つかないようにするためにたくみを傷つけるようなことはしたくなかったから。そこからだんだんたくみともっと仲良くなって、何か不安か違和感を抱え込んだまま入った関係はうまくはいかないし、年齢のこともあるし、私はそれらが解決して消えるまで、関係に入るのは待ちたかった。それで時間が少しかかちゃって、ごめんね。待たせたんだよね。
 
-    if (step.end) {
-      btnContainer.classList.add('hidden');
-    } else {
-      btnContainer.classList.remove('hidden');
-      btnLeft.innerText = step.left.text;
-      btnRight.innerText = step.right.text;
-    }
-  }
+距離を置こうってなっちゃった日からもたくみのことを思ってて、少し自分の中でたくみとの関係を整理した。10月19日、私は日記でこう書いた：
+「たくみから違和感を覚えないじゃなくて、私はやはり見て知らないふりをしていた。ただ、それを受け入れられるほど、良いところがあって、私はそれを大切にしようと思ったからだと思う。 
+たくみのことは好きだったと思う。でもその好きは、お互い時間をかけて一緒にいるから好きになる好きで、それは普通の憧れの好きよりも、ふれあいも一緒に過ごす時間もたくさん要するもの。2人の間に往復があるから成り立つもの。 
+たくみのことをすごく好きっていうよりも、私は、ただただ、1人の人を大切にできる人でありたかったんだと思う。これまでの日記を振り返ると、私はそう思った。だから、私はたくみに心を許した。まだ2人のことを分けて考えられていたときに。・・・
+今じゃたくみの立場、考えを考えないで自分の心を決めることはできない。まだ好きで、まだ前みたいな関係にはなりたいとは思う。そもそもたくみに心を許し始めたのが、大学の間は一緒にいたいって言ってくれた時だった。だから、今もそれを思うと、私は大学の間だけでもこの時間を大切にしてたくみとずっと一緒にいたいって思ってしまう。 
+・・・・・・
+優しいたくみが好きだったけど、もしそれはたくみが無理して頑張った結果であれば、私はたくみには無理してほしくはなく、お互い無理のない関係を築きたかった。・・・ 。」。私は、今までで一番誰かを大切にできる時期にたくみに出会った。そしてこのようにしてまた離れてしまった。私は、たくみとの関係で、自分のことについてまたたくさんの気づきができた。それがすごく嬉しかった。私が唯一惜しいって思ったのは、この関係が終わるのが早すぎて、これ以上たくみとの関係からできる気づきの機会はもうないこと。
 
-  function choose(direction) {
-    const step = story[currentStep];
-    const choice = step[direction];
+あれから2ヶ月も経つのに、まだたくみに本音を伝えたいのは、たくみへの気持ちだからだけじゃない。最近は自分の身にもいろいろありすぎて、私は多分それで、たくみに本音をぶつけるのを気持ちの出口に無意識にしていたのかもしれない。
 
-    // 選んだ内容を履歴に追加
-    history.push(choice.label);
+あと、最後の最後にたくみのことを守りたい、大切にしていきたいって思う気持ちが強かったから、今でもたくみのことを気にかけてる。だから、終わりにしようって何度思っても、どうしても「もしかしたらそばにいて欲しかったのかもしれない」、「私その時ひどかったのかな」、「そばに話聞いてくれる人いるかな」って考えてしまって、自分の本音を伝えたくなってしまう。でもたくみは多分もう何も考えてないのよね。何も聞きたくないみたいだし。私からは多分何も感じていないのかもしれない。そこがわからないから、本音を伝えるのが難しかった。[追記：たくみが辛いだろうってときに距離置こうって言ってそばにいてあげられなくてごめん。そのときの私も自分を守るための手段を取ったってことを理解してほしい。]
 
-    // ボタンを押すたびに毎回スプレッドシートへ送信
-    sendDataToGoogleSheet();
+本当はたくみは私のことよりも、自分のことを考えてたよね。私が感じたこと、思ったことはすべていいものではないよ、でもそれを話してたくみを傷つけたくないから話さない。
+話したいことはいろいろあるけど、とりあえずこれでいいかな？
 
-    // 次のステップへ進む
-    currentStep = choice.next;
-    renderStep();
-  }
+たくみには、次に出会う人がいい人で、その人はたくみのことを大切にできる人で、たくみも相手のことが好きで大切にできるって人に出会って欲しい。いつかは幸せになってね。
+私もこれで他に好きって言ってくれた人たちの気持ちにちゃんと向き合えるようになる気がする。
+あとね、すぐに他の人に行けるほど今気力がないから、
+海に誘いたい人ってのも、
+告白のウェブサイトの相手ってのも、
+たくみなんだよ。笑笑
+まあ、わかってたと思うけどね。
+断られたってことにするね！
 
-  function sendDataToGoogleSheet() {
-    if (!GAS_URL || GAS_URL === 'ここにGoogle Apps ScriptのURLを貼り付けます') {
-      return;
+短い間でしたが、幸せな時もありました。
+ありがとう。
+
+ビビアン．</div>
+
+    <div class="letter-footer">
+      <button id="read-btn" type="button">読了</button>
+      <div id="read-status"></div>
+    </div>
+  </div>
+
+  <script>
+    // ====== 請修改以下兩行設定 ======
+    const CORRECT_PASSWORD = "0101"; // 請改成對方的生日（例如 "0512" 或 "20010512"）
+    const GAS_URL = "https://script.google.com/macros/s/你的部署網址/exec";
+    // ================================
+
+    // 產生本次瀏覽的隨機識別碼，方便對應同一次閱讀的「開信」與「読了」時間
+    const sessionId = Math.random().toString(36).substring(2, 10);
+
+    function sendLog(eventName) {
+      if (!GAS_URL || GAS_URL.includes("https://script.google.com/macros/library/d/1yEGg67lPpY7IXNQWH2GhP9ffgzZ4NAYy_IAQJCzbUTnwg3PK6aEbNEH5/1")) return;
+      fetch(GAS_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          event: eventName,
+          sessionId: sessionId
+        })
+      }).catch(function () {});
     }
 
-    const params = new URLSearchParams();
-    params.append('choices', history.join(' ➔ '));
+    const loginScreen = document.getElementById("login-screen");
+    const letterScreen = document.getElementById("letter-screen");
+    const passwordInput = document.getElementById("password-input");
+    const loginBtn = document.getElementById("login-btn");
+    const errorMsg = document.getElementById("error-msg");
+    const readBtn = document.getElementById("read-btn");
+    const readStatus = document.getElementById("read-status");
 
-    fetch(GAS_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: params,
-    }).catch(error => {
-      console.error('送信エラー', error);
+    function handleLogin() {
+      const entered = passwordInput.value.trim();
+      if (entered === 0916) {
+        // 1. 立即記錄輸入密碼成功的時間
+        sendLog("密碼輸入正確（開啟信件）");
+
+        loginScreen.style.display = "none";
+        letterScreen.style.display = "block";
+        window.scrollTo(0, 0);
+      } else {
+        errorMsg.textContent = "パスワードが違います";
+        passwordInput.value = "";
+        passwordInput.focus();
+      }
+    }
+
+    loginBtn.addEventListener("click", handleLogin);
+    passwordInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") handleLogin();
     });
-  }
 
-  renderStep();
-</script>
+    readBtn.addEventListener("click", function () {
+      // 2. 記錄按下「読了」的時間
+      sendLog("按下「読了」");
+
+      readBtn.disabled = true;
+      readBtn.textContent = "読了済み";
+      readStatus.textContent = "読んでくれてありがとう。";
+    });
+  </script>
 </body>
 </html>
